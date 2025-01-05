@@ -36,7 +36,7 @@
         <category>靶场</category>
       </categories>
       <tags>
-        <tag>sqli-labs通关秘籍</tag>
+        <tag>通关秘籍</tag>
       </tags>
   </entry>
   <entry>
@@ -86,6 +86,21 @@
       </categories>
       <tags>
         <tag>SQL注入篇</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>靶场 - webgoat通关秘籍</title>
+    <url>/cnblogs.github.io/2025/01/05/hacker/range/webgoat/webgoat%E9%80%9A%E5%85%B3%E7%A7%98%E7%B1%8D/</url>
+    <content><![CDATA[<h3 id="General"><a href="#General" class="headerlink" title="General"></a><strong>General</strong></h3><h5 id="HTTP-Basics-第二题"><a href="#HTTP-Basics-第二题" class="headerlink" title="HTTP Basics 第二题"></a><strong>HTTP Basics 第二题</strong></h5><p><img src="https://s2.loli.net/2025/01/05/qZrLHy9OVpRX1KU.png" alt="HTTP Basics 2_1.png"><br><img src="https://s2.loli.net/2025/01/05/cRjEqoKMUODPfFL.png" alt="HTTP Basics 2_2.png"><br><img src="https://s2.loli.net/2025/01/05/yXhSjrdTcNxf5F6.png" alt="HTTP Basics 2_3.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：fzheng</span><br></pre></td></tr></table></figure>
+
+<h5 id="HTTP-Basics-第三题"><a href="#HTTP-Basics-第三题" class="headerlink" title="HTTP Basics 第三题"></a><strong>HTTP Basics 第三题</strong></h5><p><img src="https://s2.loli.net/2025/01/05/agcojkKuLtqnIZR.png" alt="General - HTTP Basics 3_1.png"><br><img src="https://s2.loli.net/2025/01/05/pq7uzC5VAOglkev.png" alt="General - HTTP Basics 3_2.png"><br><img src="https://s2.loli.net/2025/01/05/XNZqAYvudfIGs1e.png" alt="General - HTTP Basics 3_3.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">使用burpsuit抓包 修改magicnum参数=27</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>靶场</category>
+      </categories>
+      <tags>
+        <tag>通关秘籍</tag>
       </tags>
   </entry>
 </search>

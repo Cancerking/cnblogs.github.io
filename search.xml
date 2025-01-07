@@ -63,35 +63,6 @@
       </tags>
   </entry>
   <entry>
-    <title>本地靶场 - webgoat通关秘籍</title>
-    <url>/cnblogs.github.io/2025/01/05/hacker/local/range/webgoat/webgoat%E9%80%9A%E5%85%B3%E7%A7%98%E7%B1%8D/</url>
-    <content><![CDATA[<h3 id="General"><a href="#General" class="headerlink" title="General"></a><strong>General</strong></h3><h5 id="HTTP-Basics-第二题"><a href="#HTTP-Basics-第二题" class="headerlink" title="HTTP Basics 第二题"></a><strong>HTTP Basics 第二题</strong></h5><p><img src="https://s2.loli.net/2025/01/05/qZrLHy9OVpRX1KU.png" alt="HTTP Basics 2_1.png"><br><img src="https://s2.loli.net/2025/01/05/cRjEqoKMUODPfFL.png" alt="HTTP Basics 2_2.png"><br><img src="https://s2.loli.net/2025/01/05/yXhSjrdTcNxf5F6.png" alt="HTTP Basics 2_3.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：fzheng</span><br></pre></td></tr></table></figure>
-
-<h5 id="HTTP-Basics-第三题"><a href="#HTTP-Basics-第三题" class="headerlink" title="HTTP Basics 第三题"></a><strong>HTTP Basics 第三题</strong></h5><p><img src="https://s2.loli.net/2025/01/05/agcojkKuLtqnIZR.png" alt="General - HTTP Basics 3_1.png"><br><img src="https://s2.loli.net/2025/01/05/pq7uzC5VAOglkev.png" alt="General - HTTP Basics 3_2.png"><br><img src="https://s2.loli.net/2025/01/05/XNZqAYvudfIGs1e.png" alt="General - HTTP Basics 3_3.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">使用burpsuit抓包 修改magicnum参数=27</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>本地靶场</category>
-      </categories>
-      <tags>
-        <tag>靶场通关秘籍</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>网络靶场 - CTFHub</title>
-    <url>/cnblogs.github.io/2025/01/05/hacker/online/range/CTFHub/CTFHub/</url>
-    <content><![CDATA[<h2 id="技能树"><a href="#技能树" class="headerlink" title="技能树"></a><strong>技能树</strong></h2><h3 id="WEB前置技能"><a href="#WEB前置技能" class="headerlink" title="WEB前置技能"></a><strong>WEB前置技能</strong></h3><h4 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a><strong>HTTP协议</strong></h4><h5 id="请求方式"><a href="#请求方式" class="headerlink" title="请求方式"></a><strong>请求方式</strong></h5><p><img src="https://s2.loli.net/2025/01/05/Y8liGIxr27pvLJU.png" alt="CTFHub--WEB-HTTP-_1.png"><br><img src="https://s2.loli.net/2025/01/05/WvBCPqD8R3r5j74.png" alt="CTFHub--WEB-HTTP-_2.png"><br>得到提示，如果请求方法为CTFHUB，那么会得到flag<br>使用burp抓包进行修改GET为CTFHUB,得到flag<br><img src="https://s2.loli.net/2025/01/05/Tdtj9kuelKUaCRp.png" alt="CTFHub--WEB-HTTP-_3.png"></p>
-<h5 id="302跳转"><a href="#302跳转" class="headerlink" title="302跳转"></a><strong>302跳转</strong></h5><p><img src="https://s2.loli.net/2025/01/06/ceMrzoPnvVkODiI.png" alt="-WEB-HTTP-302_1.png"><br><img src="https://s2.loli.net/2025/01/06/SXAm3CLFU7qfhJd.png" alt="-WEB-HTTP-302_2.png"><br> 点击Give me Flag后发生跳转<br><img src="https://s2.loli.net/2025/01/06/dVWft2hr5EYlPZg.png" alt="-WEB-HTTP-302_3.png"><br> F12-&gt;Network<br><img src="https://s2.loli.net/2025/01/06/NXheyLSiCrKOVYE.png" alt="-WEB-HTTP-302_4.png"><br> 点击进去之后可以看到有一个链接，下意识点击抓包<br><img src="https://s2.loli.net/2025/01/06/aF5yeSgrY7f1cim.png" alt="-WEB-HTTP-302_5.png"><br> 成功拿到flag</p>
-<h5 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a><strong>Cookie</strong></h5><p><img src="https://s2.loli.net/2025/01/06/RJmU937GoqrpYQl.png" alt="-WEB-HTTP-Cookie_1.png"><br><img src="https://s2.loli.net/2025/01/06/slHREaF2BPzA4Zg.png" alt="-WEB-HTTP-Cookie_2.png"><br>这是道cookie题，又说要admin才能得到flag，应该是要伪造cookie，抓包<br><img src="https://s2.loli.net/2025/01/06/ZGWak5ocOVspX3r.png" alt="-WEB-HTTP-Cookie_3.png"><br>一开始我以为admin后面要写用户名或者密码啥的，然后就爆破，一直爆不出来 ，然后把0改成1，就可以出来flag<br><img src="https://s2.loli.net/2025/01/06/Yev8IGXhZSOrByz.png" alt="-WEB-HTTP-Cookie_4.png"><br>我在网上查时，cookie的一行应该为一条数据。也就是说这条数据的 “名字” 叫做admin，其 值 为0，改成就可以出来，但我用2，又不行了。</p>
-]]></content>
-      <categories>
-        <category>网络靶场</category>
-      </categories>
-      <tags>
-        <tag>靶场通关秘籍</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>本地靶场 - sqli-labs通关秘籍</title>
     <url>/cnblogs.github.io/2025/01/04/hacker/local/range/sqli-labs/sqli-labs%E9%80%9A%E5%85%B3%E7%A7%98%E7%B1%8D/</url>
     <content><![CDATA[<h4 id="Less-1"><a href="#Less-1" class="headerlink" title="Less-1"></a><strong>Less-1</strong></h4><p><img src="https://s2.loli.net/2025/01/05/EjymtudP18ZKbIc.png" alt="Less-1"></p>
@@ -127,6 +98,35 @@
 ]]></content>
       <categories>
         <category>本地靶场</category>
+      </categories>
+      <tags>
+        <tag>靶场通关秘籍</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>本地靶场 - webgoat通关秘籍</title>
+    <url>/cnblogs.github.io/2025/01/05/hacker/local/range/webgoat/webgoat%E9%80%9A%E5%85%B3%E7%A7%98%E7%B1%8D/</url>
+    <content><![CDATA[<h3 id="General"><a href="#General" class="headerlink" title="General"></a><strong>General</strong></h3><h5 id="HTTP-Basics-第二题"><a href="#HTTP-Basics-第二题" class="headerlink" title="HTTP Basics 第二题"></a><strong>HTTP Basics 第二题</strong></h5><p><img src="https://s2.loli.net/2025/01/05/qZrLHy9OVpRX1KU.png" alt="HTTP Basics 2_1.png"><br><img src="https://s2.loli.net/2025/01/05/cRjEqoKMUODPfFL.png" alt="HTTP Basics 2_2.png"><br><img src="https://s2.loli.net/2025/01/05/yXhSjrdTcNxf5F6.png" alt="HTTP Basics 2_3.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：fzheng</span><br></pre></td></tr></table></figure>
+
+<h5 id="HTTP-Basics-第三题"><a href="#HTTP-Basics-第三题" class="headerlink" title="HTTP Basics 第三题"></a><strong>HTTP Basics 第三题</strong></h5><p><img src="https://s2.loli.net/2025/01/05/agcojkKuLtqnIZR.png" alt="General - HTTP Basics 3_1.png"><br><img src="https://s2.loli.net/2025/01/05/pq7uzC5VAOglkev.png" alt="General - HTTP Basics 3_2.png"><br><img src="https://s2.loli.net/2025/01/05/XNZqAYvudfIGs1e.png" alt="General - HTTP Basics 3_3.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">使用burpsuit抓包 修改magicnum参数=27</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>本地靶场</category>
+      </categories>
+      <tags>
+        <tag>靶场通关秘籍</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络靶场 - CTFHub</title>
+    <url>/cnblogs.github.io/2025/01/05/hacker/online/range/CTFHub/CTFHub/</url>
+    <content><![CDATA[<h2 id="技能树"><a href="#技能树" class="headerlink" title="技能树"></a><strong>技能树</strong></h2><h3 id="WEB前置技能"><a href="#WEB前置技能" class="headerlink" title="WEB前置技能"></a><strong>WEB前置技能</strong></h3><h4 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a><strong>HTTP协议</strong></h4><h5 id="请求方式"><a href="#请求方式" class="headerlink" title="请求方式"></a><strong>请求方式</strong></h5><p><img src="https://s2.loli.net/2025/01/05/Y8liGIxr27pvLJU.png" alt="CTFHub--WEB-HTTP-_1.png"><br><img src="https://s2.loli.net/2025/01/05/WvBCPqD8R3r5j74.png" alt="CTFHub--WEB-HTTP-_2.png"><br>得到提示，如果请求方法为CTFHUB，那么会得到flag<br>使用burp抓包进行修改GET为CTFHUB,得到flag<br><img src="https://s2.loli.net/2025/01/05/Tdtj9kuelKUaCRp.png" alt="CTFHub--WEB-HTTP-_3.png"></p>
+<h5 id="302跳转"><a href="#302跳转" class="headerlink" title="302跳转"></a><strong>302跳转</strong></h5><p><img src="https://s2.loli.net/2025/01/06/ceMrzoPnvVkODiI.png" alt="-WEB-HTTP-302_1.png"><br><img src="https://s2.loli.net/2025/01/06/SXAm3CLFU7qfhJd.png" alt="-WEB-HTTP-302_2.png"><br> 点击Give me Flag后发生跳转<br><img src="https://s2.loli.net/2025/01/06/dVWft2hr5EYlPZg.png" alt="-WEB-HTTP-302_3.png"><br> F12-&gt;Network<br><img src="https://s2.loli.net/2025/01/06/NXheyLSiCrKOVYE.png" alt="-WEB-HTTP-302_4.png"><br> 点击进去之后可以看到有一个链接，下意识点击抓包<br><img src="https://s2.loli.net/2025/01/06/aF5yeSgrY7f1cim.png" alt="-WEB-HTTP-302_5.png"><br> 成功拿到flag</p>
+<h5 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a><strong>Cookie</strong></h5><p><img src="https://s2.loli.net/2025/01/06/RJmU937GoqrpYQl.png" alt="-WEB-HTTP-Cookie_1.png"><br><img src="https://s2.loli.net/2025/01/06/slHREaF2BPzA4Zg.png" alt="-WEB-HTTP-Cookie_2.png"><br>这是道cookie题，又说要admin才能得到flag，应该是要伪造cookie，抓包<br><img src="https://s2.loli.net/2025/01/06/ZGWak5ocOVspX3r.png" alt="-WEB-HTTP-Cookie_3.png"><br>一开始我以为admin后面要写用户名或者密码啥的，然后就爆破，一直爆不出来 ，然后把0改成1，就可以出来flag<br><img src="https://s2.loli.net/2025/01/06/Yev8IGXhZSOrByz.png" alt="-WEB-HTTP-Cookie_4.png"><br>我在网上查时，cookie的一行应该为一条数据。也就是说这条数据的 “名字” 叫做admin，其 值 为0，改成就可以出来，但我用2，又不行了。</p>
+]]></content>
+      <categories>
+        <category>网络靶场</category>
       </categories>
       <tags>
         <tag>靶场通关秘籍</tag>

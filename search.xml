@@ -36,17 +36,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Nginx笔记</title>
-    <url>/cnblogs.github.io/2025/01/10/operations/nginx/nginx%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h4 id="配置http重定向https"><a href="#配置http重定向https" class="headerlink" title="配置http重定向https"></a>配置http重定向https</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">        listen 80;</span><br><span class="line">        server_name 你的域名;</span><br><span class="line">        rewrite ^(.*)$  https://你的域名$1 permanent;  # http转https</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>运维技术</category>
-      </categories>
-      <tags>
-        <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CentOS笔记</title>
     <url>/cnblogs.github.io/2025/01/10/operations/linux/CentOS%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h5 id="更新YUM源"><a href="#更新YUM源" class="headerlink" title="更新YUM源"></a>更新YUM源</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ls -al /etc/yum.repos.d</span><br><span class="line">cp CentOS-Base.repo CentOS-Base.repo.backup</span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">yum clean all</span><br><span class="line">yum makecache</span><br><span class="line">yum -y update</span><br></pre></td></tr></table></figure>]]></content>
@@ -72,6 +61,17 @@
       </categories>
       <tags>
         <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx笔记</title>
+    <url>/cnblogs.github.io/2025/01/10/operations/nginx/nginx%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h4 id="配置http重定向https"><a href="#配置http重定向https" class="headerlink" title="配置http重定向https"></a>配置http重定向https</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">        listen 80;</span><br><span class="line">        server_name 你的域名;</span><br><span class="line">        rewrite ^(.*)$  https://你的域名$1 permanent;  # http转https</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>运维技术</category>
+      </categories>
+      <tags>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>

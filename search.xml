@@ -388,7 +388,7 @@
   <entry>
     <title>Window笔记</title>
     <url>/cnblogs.github.io/2025/01/11/operations/window/Window%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h4 id="CMD命令详解"><a href="#CMD命令详解" class="headerlink" title="CMD命令详解"></a>CMD命令详解</h4><h5 id="SCP从linux复制文件到本地桌面"><a href="#SCP从linux复制文件到本地桌面" class="headerlink" title="SCP从linux复制文件到本地桌面"></a>SCP从linux复制文件到本地桌面</h5><p>下载的文件输入scp root@服务器ip:文件绝对路径（如scp <a href="mailto:&#114;&#x6f;&#x6f;&#x74;&#64;&#49;&#57;&#x32;&#46;&#49;&#x36;&#56;&#46;&#56;&#x2e;&#x31;&#51;&#50;">&#114;&#x6f;&#x6f;&#x74;&#64;&#49;&#57;&#x32;&#46;&#49;&#x36;&#56;&#46;&#56;&#x2e;&#x31;&#51;&#50;</a>:&#x2F;root&#x2F;test002） .&#x2F;Desktop，然后回车输入服务器密码。上传本地桌面文件到服务器,输入scp Desk\文件路径 root@服务器ip:文件绝对路径（如scp Desktop\test003.txt <a href="mailto:&#x72;&#x6f;&#x6f;&#x74;&#x40;&#49;&#x39;&#x32;&#x2e;&#49;&#x36;&#56;&#46;&#56;&#x2e;&#x31;&#x33;&#50;">&#x72;&#x6f;&#x6f;&#x74;&#x40;&#49;&#x39;&#x32;&#x2e;&#49;&#x36;&#56;&#46;&#56;&#x2e;&#x31;&#x33;&#50;</a>:&#x2F;root&#x2F;） 然后回车输入服务器密码</p>
+    <content><![CDATA[<h4 id="CMD命令详解"><a href="#CMD命令详解" class="headerlink" title="CMD命令详解"></a>CMD命令详解</h4><h5 id="SCP从linux复制文件到本地桌面"><a href="#SCP从linux复制文件到本地桌面" class="headerlink" title="SCP从linux复制文件到本地桌面"></a>SCP从linux复制文件到本地桌面</h5><p>下载的文件输入scp root@服务器ip:文件绝对路径（如scp <a href="mailto:&#x72;&#111;&#111;&#116;&#x40;&#x31;&#x39;&#50;&#46;&#49;&#54;&#56;&#46;&#56;&#x2e;&#x31;&#x33;&#x32;">&#x72;&#111;&#111;&#116;&#x40;&#x31;&#x39;&#50;&#46;&#49;&#54;&#56;&#46;&#56;&#x2e;&#x31;&#x33;&#x32;</a>:&#x2F;root&#x2F;test002） .&#x2F;Desktop，然后回车输入服务器密码。上传本地桌面文件到服务器,输入scp Desk\文件路径 root@服务器ip:文件绝对路径（如scp Desktop\test003.txt <a href="mailto:&#x72;&#x6f;&#111;&#x74;&#64;&#x31;&#57;&#x32;&#x2e;&#49;&#x36;&#x38;&#46;&#56;&#46;&#49;&#51;&#x32;">&#x72;&#x6f;&#111;&#x74;&#64;&#x31;&#57;&#x32;&#x2e;&#49;&#x36;&#x38;&#46;&#56;&#46;&#49;&#51;&#x32;</a>:&#x2F;root&#x2F;） 然后回车输入服务器密码</p>
 <h4 id="软件推荐"><a href="#软件推荐" class="headerlink" title="软件推荐"></a>软件推荐</h4><p>硬件检测-Hwinfo   <a href="https://sourceforge.net/projects/hwinfo/">下载地址</a><br>SqlServer转Mysql工具-Mss2sql <a href="http://files.cnblogs.com/andrew-blog/mss2sql.rar">下载地址</a></p>
 ]]></content>
       <categories>
@@ -486,28 +486,6 @@
       </tags>
   </entry>
   <entry>
-    <title>VulnHub靶机笔记</title>
-    <url>/cnblogs.github.io/2025/01/23/hacker/infiltrate/note/VulnHub%E9%9D%B6%E6%9C%BA%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="03541b2153404ebfd51c5174176f7ce723587b49957cbec8f1e42be173236e8f">3186c319156b07c01cb1ef89dd22490e485ebd5e770f3a816864e4205647f178ccba29da66332efc9fe8dbba1908c081adfa8b5698e3d5fc2f08dfb92667a6d75712092a9011cfce2170d788d39701577830feb167d9993ff9551d4b40b656245bd2cce5f0e9ac3fc91c5f13ebb6d7b5f34500bc56fb09caad31361f423af2e883172c700f2fe17b01c94b5964a9b30a4c2b4056ce182f6529f0a8b4856fa83947391b688fa7df1bf2d4c3b66f12916e19cc5c7833b660881c794ce26eb408ea8aa3b535a034c3b461c5ab128c53d13252ab0e0850d44ff4ac5e75be96a9d8c2323c6ed42e55160c9a1a13d7ad04d31af2c9d40fce715ce6dfc479a8b53b6aa519b1a9ac7391c50d73ad0ca3f435154cbae8ea5e2fa529cd2f7ba314edad6ef3aeee6e821b05c2bb8399d3d7e1c854194f38e517d51b070ba8e3763a958c280fb1fc179ce7de9899ef0461054756fcd97626251fca9afa9cc8499a55fb757a667cf04c096573f7c5d1c73c3bfdd85ec725525a5c647fd11e18a407a1a641fc936586685f1eb0898051dc6e95bcbbae972ae99a37e24d2de9c4ac536e8689bc1d7db784c5c81ba2c0cbfb9b7fd8b46c8088790885534a44edd202749ba23a434c355c41967b0b01c30d39de42a06e53d1d02e9874e9d18cc04d3983d9e6d235f0854cdefa383acfed5727953f249692cb5147250a7088ead7756d3142ef59e945c107ad7a5f0960760732402fbf11df6446a65cb4811b6b579549969d932f70644d5d7215bd5c8c7118ffeb1e944fd79d3e3bd27e2b9d6950a30aca2a586ea5bd1e5ff9b5091d5f8fe6f586a7e717de3b59c7b037ee145a8f58776712c7d1712ebe9dd5d980064720a97b108d497b19beefb7387dad4a9467016d5e306a52a07b465ab5bc9ac7bf1276eba8ecda193c0d331a6b32aa69efa19f9704843a47b2a9ff4df409668a425e23fc164be4b2f8c9b18d5378278bbd413db65ccb76220d55249a0fcb2180cdabb20ad0b5857521b5bc54da89fca0a0cb254846d4a594dfbc7182165c05a2c9b9bda73212c83cbc2ca96c027cdd9d1f5f21654f7e5d5330216e2dc6ef11b1a2aba6c686697a89bcc0abce2c8e0d7430bbe1b7032b2cb76861387c6df4cd4d7507bf25a5672a23a09c9ce8ce9a9ae46e6ba697f2a99051e749e2aea5d2826bbf59fd1c50002934355fce43a3883d9f12e98a3021197423b528fd042451cebcd3e3531c183ed670e4ec7c3e7922042442d2deb8aa5591b2c3f8148148850f72f1ef06e342a12b5dfaeeea599a9793cd8b8b89b3930bc59e0dcef55a6b2fffed3ecd7848844310a5937e79bd0fafbf958ec5b52f289ffa3f50f87c301189056bc4e119d8640310c77e43c1da56c9ffbabc19987d57f23420c7e3076a932cb2b22f6968e2a7d7ffcd80d2bdf904f1834c462e9a50d1a993a7668c79dd8eab6784a2e467af4105e6b778a4776b8041a80b50f3dfe248d5c90e0e96eacdefa6e222693f029e456edf754e5cd8bf9a84fd587573292cb24f0586bc9f400ff3d447f84d6a6eeafa1cb3956d11d8d0aed86b791657d66bd3ebb093eec1c70a4f3ce81b45235cab5de9542c1ded7707a44b942c199bc3fdb5277f6673d50d62b56ea36fb85ff583d712a62f605d55777ab0c7c6a45a42d55028239e5b61f0698731a862743eee8f26af0eae30adc0ef6fcc6270e4b6c7c207bed27602e0ac255eea2a1db2036d1405eacee3ec6cf9747c41f3ef2e84cc10b65a90a20eb49b3593c9df079b58862ad637b49fccb99418011a8cf1a87cb006ca9085c15f6d624a6b78ae9e9966cc747ed65eb6d695cbf0c107d25f98d810c1726dfdded2204ae5d60f2d903b92d60de8a3aa87ebb3b8868ed17ee1fb3957cfe643e616990ebb744b9c8d803937bbc3394c65213d221e84e8acf5041b38469293626f3fc320c343870fce50f6e754b94b491c7317feef6eab93f9a4051db841f848d00c6bb224285311d7576e2d895227364ae9a7941b71b8f7c482b7dafa2b2feea68ac779925adcf2472d5a592d4f7d21f67f7ae993fbcb80e29fe6579fc42d138df5b89f31371175455ad8bc906155a4989c95a76bd561196d6b52723cd3833344e50e66b4e2e81c47385401749298e437c8422567e33d72ba52ca35be0abe65494b8a41c26d227a2cec033e94548bc4812ef3331e26ed211300e219c3d45e62dd60b8f6a4979345fd9531db6c62a72df8bc69b8cea03c85617e00fd7d43acd1f7881d9d749c2ee9e719172b55abe65c8f40542bed70e2f74e8b1f27de39da955883ae13c035b16077c3d4d18d72e627459817a005a5e59c5994f676fdecf52cc61deb5a73f626f7599730c1c1b82d6588893024f5b3121858165342d09a236dc2c6f8a170428c291ba3dd8529848551da05729ea2629cd918bcee1ebf25eee58102ebf1f56534d589e6a82880d2cb4d50647d2dce824c571d37a1541e023891d621e55c96edc197d0fad0b2fa169737eec9ccd14ab1d10b43c5df00db4b198613d77ba4</script>
-  <div class="hbe hbe-content">
-    <div class="hbe hbe-input hbe-input-default">
-      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
-      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
-        <span class="hbe hbe-input-label-content hbe-input-label-content-default">密码输入框上描述性内容</span>
-      </label>
-    </div>
-  </div>
-</div>
-<script data-pjax src="/cnblogs.github.io/lib/hbe.js"></script><link href="/cnblogs.github.io/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
-      <categories>
-        <category>WEB漏洞挖掘笔记</category>
-      </categories>
-      <tags>
-        <tag>渗透笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>WEB漏洞挖掘方法 - SQL注入篇</title>
     <url>/cnblogs.github.io/2025/01/04/hacker/infiltrate/shares/WEB%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98%E6%96%B9%E6%B3%95-SQL%E6%B3%A8%E5%85%A5%E7%AF%87/</url>
     <content><![CDATA[<p><strong>常见的注入点</strong></p>
@@ -554,6 +532,28 @@
       </categories>
       <tags>
         <tag>SQL注入篇</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VulnHub靶机笔记</title>
+    <url>/cnblogs.github.io/2025/01/23/hacker/infiltrate/note/VulnHub%E9%9D%B6%E6%9C%BA%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="03541b2153404ebfd51c5174176f7ce723587b49957cbec8f1e42be173236e8f">3186c319156b07c01cb1ef89dd22490e485ebd5e770f3a816864e4205647f178ccba29da66332efc9fe8dbba1908c081adfa8b5698e3d5fc2f08dfb92667a6d75712092a9011cfce2170d788d39701577830feb167d9993ff9551d4b40b656245bd2cce5f0e9ac3fc91c5f13ebb6d7b5f34500bc56fb09caad31361f423af2e883172c700f2fe17b01c94b5964a9b30a4c2b4056ce182f6529f0a8b4856fa83947391b688fa7df1bf2d4c3b66f12916e19cc5c7833b660881c794ce26eb408ea8aa3b535a034c3b461c5ab128c53d13252ab0e0850d44ff4ac5e75be96a9d8c2323c6ed42e55160c9a1a13d7ad04d31af2c9d40fce715ce6dfc479a8b53b6aa519b1a9ac7391c50d73ad0ca3f435154cbae8ea5e2fa529cd2f7ba314edad6ef3aeee6e821b05c2bb8399d3d7e1c854194f38e517d51b070ba8e3763a958c280fb1fc179ce7de9899ef0461054756fcd97626251fca9afa9cc8499a55fb757a667cf04c096573f7c5d1c73c3bfdd85ec725525a5c647fd11e18a407a1a641fc936586685f1eb0898051dc6e95bcbbae972ae99a37e24d2de9c4ac536e8689bc1d7db784c5c81ba2c0cbfb9b7fd8b46c8088790885534a44edd202749ba23a434c355c41967b0b01c30d39de42a06e53d1d02e9874e9d18cc04d3983d9e6d235f0854cdefa383acfed5727953f249692cb5147250a7088ead7756d3142ef59e945c107ad7a5f0960760732402fbf11df6446a65cb4811b6b579549969d932f70644d5d7215bd5c8c7118ffeb1e944fd79d3e3bd27e2b9d6950a30aca2a586ea5bd1e5ff9b5091d5f8fe6f586a7e717de3b59c7b037ee145a8f58776712c7d1712ebe9dd5d980064720a97b108d497b19beefb7387dad4a9467016d5e306a52a07b465ab5bc9ac7bf1276eba8ecda193c0d331a6b32aa69efa19f9704843a47b2a9ff4df409668a425e23fc164be4b2f8c9b18d5378278bbd413db65ccb76220d55249a0fcb2180cdabb20ad0b5857521b5bc54da89fca0a0cb254846d4a594dfbc7182165c05a2c9b9bda73212c83cbc2ca96c027cdd9d1f5f21654f7e5d5330216e2dc6ef11b1a2aba6c686697a89bcc0abce2c8e0d7430bbe1b7032b2cb76861387c6df4cd4d7507bf25a5672a23a09c9ce8ce9a9ae46e6ba697f2a99051e749e2aea5d2826bbf59fd1c50002934355fce43a3883d9f12e98a3021197423b528fd042451cebcd3e3531c183ed670e4ec7c3e7922042442d2deb8aa5591b2c3f8148148850f72f1ef06e342a12b5dfaeeea599a9793cd8b8b89b3930bc59e0dcef55a6b2fffed3ecd7848844310a5937e79bd0fafbf958ec5b52f289ffa3f50f87c301189056bc4e119d8640310c77e43c1da56c9ffbabc19987d57f23420c7e3076a932cb2b22f6968e2a7d7ffcd80d2bdf904f1834c462e9a50d1a993a7668c79dd8eab6784a2e467af4105e6b778a4776b8041a80b50f3dfe248d5c90e0e96eacdefa6e222693f029e456edf754e5cd8bf9a84fd587573292cb24f0586bc9f400ff3d447f84d6a6eeafa1cb3956d11d8d0aed86b791657d66bd3ebb093eec1c70a4f3ce81b45235cab5de9542c1ded7707a44b942c199bc3fdb5277f6673d50d62b56ea36fb85ff583d712a62f605d55777ab0c7c6a45a42d55028239e5b61f0698731a862743eee8f26af0eae30adc0ef6fcc6270e4b6c7c207bed27602e0ac255eea2a1db2036d1405eacee3ec6cf9747c41f3ef2e84cc10b65a90a20eb49b3593c9df079b58862ad637b49fccb99418011a8cf1a87cb006ca9085c15f6d624a6b78ae9e9966cc747ed65eb6d695cbf0c107d25f98d810c1726dfdded2204ae5d60f2d903b92d60de8a3aa87ebb3b8868ed17ee1fb3957cfe643e616990ebb744b9c8d803937bbc3394c65213d221e84e8acf5041b38469293626f3fc320c343870fce50f6e754b94b491c7317feef6eab93f9a4051db841f848d00c6bb224285311d7576e2d895227364ae9a7941b71b8f7c482b7dafa2b2feea68ac779925adcf2472d5a592d4f7d21f67f7ae993fbcb80e29fe6579fc42d138df5b89f31371175455ad8bc906155a4989c95a76bd561196d6b52723cd3833344e50e66b4e2e81c47385401749298e437c8422567e33d72ba52ca35be0abe65494b8a41c26d227a2cec033e94548bc4812ef3331e26ed211300e219c3d45e62dd60b8f6a4979345fd9531db6c62a72df8bc69b8cea03c85617e00fd7d43acd1f7881d9d749c2ee9e719172b55abe65c8f40542bed70e2f74e8b1f27de39da955883ae13c035b16077c3d4d18d72e627459817a005a5e59c5994f676fdecf52cc61deb5a73f626f7599730c1c1b82d6588893024f5b3121858165342d09a236dc2c6f8a170428c291ba3dd8529848551da05729ea2629cd918bcee1ebf25eee58102ebf1f56534d589e6a82880d2cb4d50647d2dce824c571d37a1541e023891d621e55c96edc197d0fad0b2fa169737eec9ccd14ab1d10b43c5df00db4b198613d77ba4</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">密码输入框上描述性内容</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/cnblogs.github.io/lib/hbe.js"></script><link href="/cnblogs.github.io/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
+      <categories>
+        <category>WEB漏洞挖掘笔记</category>
+      </categories>
+      <tags>
+        <tag>渗透笔记</tag>
       </tags>
   </entry>
   <entry>

@@ -1,0 +1,530 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>MySQL数据库七【存储过程】 | 落子&amp;无悔</title><meta name="author" content="fzheng"><meta name="copyright" content="fzheng"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="存储过程存储过程（Stored Procedure）是一组预编译并存储在数据库中的 SQL 语句集合，可包含数据查询、数据更新、流程控制等操作。它如同数据库中的 “函数”，接受输入参数，执行内部逻辑，并可返回结果。与普通 SQL 语句相比，存储过程具有更高的复用性、安全性和执行效率。 存储过程的作用提高代码复用性：将常用的业务逻辑封装成存储过程，不同的应用程序或 SQL 语句可重复调用，避免重复编">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL数据库七【存储过程】">
+<meta property="og:url" content="https://cancerking.github.io/cnblogs.github.io/p/c50c.html">
+<meta property="og:site_name" content="落子&amp;无悔">
+<meta property="og:description" content="存储过程存储过程（Stored Procedure）是一组预编译并存储在数据库中的 SQL 语句集合，可包含数据查询、数据更新、流程控制等操作。它如同数据库中的 “函数”，接受输入参数，执行内部逻辑，并可返回结果。与普通 SQL 语句相比，存储过程具有更高的复用性、安全性和执行效率。 存储过程的作用提高代码复用性：将常用的业务逻辑封装成存储过程，不同的应用程序或 SQL 语句可重复调用，避免重复编">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cancerking.github.io/cnblogs.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-08-23T11:57:59.000Z">
+<meta property="article:modified_time" content="2025-08-23T12:19:50.771Z">
+<meta property="article:author" content="fzheng">
+<meta property="article:tag" content="MySQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cancerking.github.io/cnblogs.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/cnblogs.github.io/img/favicon.png"><link rel="canonical" href="https://cancerking.github.io/cnblogs.github.io/p/c50c.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/cnblogs.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?0073f853b06906bfe493e7a878137fa8";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/cnblogs.github.io/',
+  algolia: undefined,
+  localSearch: {"path":"/cnblogs.github.io/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MySQL数据库七【存储过程】',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/css/main.css"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='screen'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(http://tool.liumingye.cn/bingimg/img.php);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/cnblogs.github.io/img/butterfly-icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/cnblogs.github.io/archives/"><div class="headline">文章</div><div class="length-num">166</div></a><a href="/cnblogs.github.io/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/cnblogs.github.io/categories/"><div class="headline">分类</div><div class="length-num">21</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/cnblogs.github.io/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/cnblogs.github.io/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/cnblogs.github.io/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/cnblogs.github.io/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/cnblogs.github.io/shuoshuo/"><i class="fa-fw fa fa-commenting"></i><span> 说说</span></a></li><li><a class="site-page child" href="/cnblogs.github.io/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/cnblogs.github.io/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/cnblogs.github.io/bangumi/"><i class="fa-fw fa fa-video"></i><span> 追番</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/cnblogs.github.io/link/"><i class="fa-fw fa fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/cnblogs.github.io/comments/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/cnblogs.github.io/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent;"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/cnblogs.github.io/"></a><a class="nav-page-title" href="/cnblogs.github.io/"><span class="site-name">MySQL数据库七【存储过程】</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/cnblogs.github.io/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/cnblogs.github.io/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/cnblogs.github.io/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/cnblogs.github.io/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/cnblogs.github.io/shuoshuo/"><i class="fa-fw fa fa-commenting"></i><span> 说说</span></a></li><li><a class="site-page child" href="/cnblogs.github.io/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/cnblogs.github.io/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/cnblogs.github.io/bangumi/"><i class="fa-fw fa fa-video"></i><span> 追番</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/cnblogs.github.io/link/"><i class="fa-fw fa fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/cnblogs.github.io/comments/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/cnblogs.github.io/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">MySQL数据库七【存储过程】</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-08-23T11:57:59.000Z" title="发表于 2025-08-23 19:57:59">2025-08-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-23T12:19:50.771Z" title="更新于 2025-08-23 20:19:50">2025-08-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/cnblogs.github.io/categories/MySQL/">MySQL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/cnblogs.github.io/p/c50c.html#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/cnblogs.github.io/p/c50c.html" itemprop="commentCount"><i class="fa-solid fa-spinner fa-spin"></i></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h2><p>存储过程（Stored Procedure）是一组预编译并存储在数据库中的 SQL 语句集合，可包含数据查询、数据更新、流程控制等操作。它如同数据库中的 “函数”，接受输入参数，执行内部逻辑，并可返回结果。与普通 SQL 语句相比，存储过程具有更高的复用性、安全性和执行效率。</p>
+<h3 id="存储过程的作用"><a href="#存储过程的作用" class="headerlink" title="存储过程的作用"></a>存储过程的作用</h3><p><strong>提高代码复用性：</strong>将常用的业务逻辑封装成存储过程，不同的应用程序或 SQL 语句可重复调用，避免重复编写相同的 SQL 代码。例如，在一个电商系统中，计算订单总金额、统计商品库存等操作可能会在多个地方用到，将这些逻辑封装在存储过程中，就可以方便地在不同模块调用。<br><strong>增强安全性：</strong>应用程序只需调用存储过程，无需直接操作数据库表，减少了敏感数据暴露的风险。同时，可通过权限控制，限制用户对存储过程的调用权限。比如，只允许特定用户执行某个涉及敏感数据操作的存储过程，而不给予其对底层表的直接访问权限。<br><strong>提升执行效率：</strong>存储过程在数据库服务器端执行，减少了客户端与服务器之间的数据传输量。并且，存储过程在首次执行时会被编译并缓存，后续调用可直接执行缓存的代码，加快执行速度。尤其对于复杂的查询或批量数据处理任务，这种优势更为明显。<br><strong>实现复杂业务逻辑：</strong>利用存储过程支持的流程控制语句（如条件判断、循环等），可以实现复杂的业务逻辑，如数据校验、批量处理、事务控制等。以银行转账为例，在一个存储过程中，可以通过事务确保转账操作的原子性，即要么转账成功，要么回滚，保证数据的一致性。</p>
+<h3 id="与函数的区别"><a href="#与函数的区别" class="headerlink" title="与函数的区别"></a>与函数的区别</h3><p>存储过程和函数在很多方面有相似之处，但也存在一些关键区别：<br><strong>返回值：</strong>存储过程可以通过参数返回多个值，也可以不返回值；函数必须有返回值，且只能返回一个值。例如，一个存储过程可以同时返回用户的姓名、年龄和邮箱等多个信息，而函数一般只能返回一个计算结果，如计算两个数的和。<br><strong>调用方式：</strong>存储过程使用 CALL 语句调用；函数可在 SQL 表达式中直接调用，类似于其他内置函数。比如在查询语句中，可以直接使用函数对某一列数据进行处理，而调用存储过程则需要专门的 CALL 语句。<br><strong>应用场景：</strong>存储过程更适合处理复杂的业务逻辑和批量操作；函数则常用于计算和数据转换，返回特定的计算结果。在处理订单数据时，可能会用存储过程来处理整个订单流程，包括插入订单信息、更新库存等操作；而在计算商品折扣价格时，可能会使用函数来实现。</p>
+<h2 id="存储过程的创建与调用"><a href="#存储过程的创建与调用" class="headerlink" title="存储过程的创建与调用"></a>存储过程的创建与调用</h2><h3 id="创建存储过程"><a href="#创建存储过程" class="headerlink" title="创建存储过程"></a>创建存储过程</h3><p>使用 CREATE PROCEDURE 语句创建存储过程，基本语法如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> procedure_name (</span><br><span class="line">    [<span class="keyword">IN</span><span class="operator">|</span><span class="keyword">OUT</span><span class="operator">|</span><span class="keyword">INOUT</span> parameter_name data_type],</span><br><span class="line">    ...</span><br><span class="line">)</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="comment">-- 存储过程体，包含SQL语句和流程控制语句</span></span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<p>procedure_name：存储过程的名称，在数据库中必须唯一。命名时应尽量遵循一定的规范，使其能清晰地反映存储过程的功能，比如计算订单总金额的存储过程可以命名为calculate_order_total。</p>
+<ul>
+<li>IN：输入参数，用于将数据传入存储过程，在存储过程内部只能读取，不能修改。例如，要查询某个用户的信息，用户 ID 就可以作为输入参数传入存储过程。</li>
+<li>OUT：输出参数，用于从存储过程中返回数据，在存储过程内部只能赋值，不能读取传入的值。比如存储过程计算出的结果，像订单总金额，就可以通过输出参数返回给调用者。</li>
+<li>INOUT：输入输出参数，既可以传入数据，也可以返回数据，在存储过程内部既可读取也可修改。例如，一个存储过程需要对传入的某个数值进行处理并返回修改后的结果，就可以使用 INOUT 参数。</li>
+<li>data_type：参数的数据类型，如INT、VARCHAR、DATE等，必须与实际传入或返回的数据类型一致。</li>
+<li>BEGIN和END：用于界定存储过程体的开始和结束，存储过程的具体逻辑代码写在这两者之间。</li>
+</ul>
+<p>示例：创建一个简单的存储过程，用于查询用户表中用户的数量</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> GetUserCount()</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> users;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>这里使用了DELIMITER语句将语句结束符临时修改为&#x2F;&#x2F;，因为在存储过程体中可能会包含多个以分号结尾的 SQL 语句，如果不修改结束符，MySQL 会在遇到第一个分号时就认为存储过程定义结束。在存储过程定义完成后，再将结束符改回默认的分号。</p>
+<h3 id="调用存储过程"><a href="#调用存储过程" class="headerlink" title="调用存储过程"></a>调用存储过程</h3><p><strong>无参数的存储过程：</strong>直接使用 CALL 语句调用，例如调用上面创建的GetUserCount存储过程：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CALL</span> GetUserCount();</span><br></pre></td></tr></table></figure>
+<p><strong>带输入参数的存储过程：</strong>传入相应的值，例如创建一个根据用户 ID 查询用户信息的存储过程：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> GetUserById(<span class="keyword">IN</span> p_user_id <span class="type">INT</span>)</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> id <span class="operator">=</span> p_user_id;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用时：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CALL</span> GetUserById(<span class="number">1</span>); <span class="comment">-- 假设要查询ID为1的用户信息</span></span><br></pre></td></tr></table></figure>
+<p><strong>带输出参数的存储过程：</strong>需要定义变量接收返回值，例如创建一个存储过程，用于返回用户表中最大的用户 ID：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> GetMaxUserId(<span class="keyword">OUT</span> p_max_id <span class="type">INT</span>)</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">MAX</span>(id) <span class="keyword">INTO</span> p_max_id <span class="keyword">FROM</span> users;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用时:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="variable">@max_id</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">-- 定义一个变量@max_id用于接收输出参数</span></span><br><span class="line"><span class="keyword">CALL</span> GetMaxUserId(<span class="variable">@max_id</span>);</span><br><span class="line"><span class="keyword">SELECT</span> <span class="variable">@max_id</span>; <span class="comment">-- 查看返回的最大用户ID</span></span><br></pre></td></tr></table></figure>
+<p><strong>带输入输出参数的存储过程：</strong>例如创建一个存储过程，将传入的数值翻倍并返回：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> DoubleValue(<span class="keyword">INOUT</span> num <span class="type">INT</span>)</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">SET</span> num <span class="operator">=</span> num <span class="operator">*</span> <span class="number">2</span>;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用时：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="variable">@value</span> <span class="operator">=</span> <span class="number">10</span>; <span class="comment">-- 初始化变量@value为10</span></span><br><span class="line"><span class="keyword">CALL</span> DoubleValue(<span class="variable">@value</span>);</span><br><span class="line"><span class="keyword">SELECT</span> <span class="variable">@value</span>; <span class="comment">-- 输出结果为20</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="修改与删除存储过程"><a href="#修改与删除存储过程" class="headerlink" title="修改与删除存储过程"></a>修改与删除存储过程</h3><p><strong>修改存储过程：</strong>MySQL 不直接支持修改存储过程的定义，需要先删除原存储过程，再重新创建。所以在开发过程中，如果要对存储过程进行修改，需要谨慎操作，确保不会影响到正在使用该存储过程的业务。<br><strong>删除存储过程：</strong>使用 DROP PROCEDURE 语句删除存储过程，如果要删除上面创建的GetUserCount存储过程，可以这样写：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">PROCEDURE</span> IF <span class="keyword">EXISTS</span> GetUserCount;</span><br></pre></td></tr></table></figure>
+<p>IF EXISTS关键字用于避免在存储过程不存在时抛出错误。</p>
+<h2 id="存储过程的流程控制语句"><a href="#存储过程的流程控制语句" class="headerlink" title="存储过程的流程控制语句"></a>存储过程的流程控制语句</h2><h3 id="条件判断语句（IF-和-CASE）"><a href="#条件判断语句（IF-和-CASE）" class="headerlink" title="条件判断语句（IF 和 CASE）"></a>条件判断语句（IF 和 CASE）</h3><h4 id="IF-语句"><a href="#IF-语句" class="headerlink" title="IF 语句"></a>IF 语句</h4><p>基本语法：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">IF <span class="keyword">condition</span> <span class="keyword">THEN</span></span><br><span class="line">    <span class="comment">-- 语句块1</span></span><br><span class="line">ELSEIF <span class="keyword">condition</span> <span class="keyword">THEN</span></span><br><span class="line">    <span class="comment">-- 语句块2</span></span><br><span class="line"><span class="keyword">ELSE</span></span><br><span class="line">    <span class="comment">-- 语句块3</span></span><br><span class="line"><span class="keyword">END</span> IF;</span><br></pre></td></tr></table></figure>
+<p>示例：创建一个存储过程，根据员工的工资情况判断其工资级别</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> check_salary_level(<span class="keyword">IN</span> p_salary <span class="type">DECIMAL</span>(<span class="number">10</span>, <span class="number">2</span>))</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    IF p_salary <span class="operator">&gt;=</span> <span class="number">10000</span> <span class="keyword">THEN</span></span><br><span class="line">        <span class="keyword">SELECT</span> <span class="string">&#x27;高工资级别&#x27;</span>;</span><br><span class="line">    ELSEIF p_salary <span class="operator">&gt;=</span> <span class="number">5000</span> <span class="keyword">THEN</span></span><br><span class="line">        <span class="keyword">SELECT</span> <span class="string">&#x27;中等工资级别&#x27;</span>;</span><br><span class="line">    <span class="keyword">ELSE</span></span><br><span class="line">        <span class="keyword">SELECT</span> <span class="string">&#x27;低工资级别&#x27;</span>;</span><br><span class="line">    <span class="keyword">END</span> IF;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用时：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CALL</span> check_salary_level(<span class="number">8000</span>); <span class="comment">-- 输出中等工资级别</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="CASE-语句"><a href="#CASE-语句" class="headerlink" title="CASE 语句"></a>CASE 语句</h4><p>基本语法：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CASE</span> <span class="keyword">value</span></span><br><span class="line">    <span class="keyword">WHEN</span> value1 <span class="keyword">THEN</span></span><br><span class="line">        <span class="comment">-- 语句块1</span></span><br><span class="line">    <span class="keyword">WHEN</span> value2 <span class="keyword">THEN</span></span><br><span class="line">        <span class="comment">-- 语句块2</span></span><br><span class="line">    <span class="keyword">ELSE</span></span><br><span class="line">        <span class="comment">-- 语句块3</span></span><br><span class="line"><span class="keyword">END</span> <span class="keyword">CASE</span>;</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CASE</span></span><br><span class="line">    <span class="keyword">WHEN</span> condition1 <span class="keyword">THEN</span></span><br><span class="line">        <span class="comment">-- 语句块1</span></span><br><span class="line">    <span class="keyword">WHEN</span> condition2 <span class="keyword">THEN</span></span><br><span class="line">        <span class="comment">-- 语句块2</span></span><br><span class="line">    <span class="keyword">ELSE</span></span><br><span class="line">        <span class="comment">-- 语句块3</span></span><br><span class="line"><span class="keyword">END</span> <span class="keyword">CASE</span>;</span><br></pre></td></tr></table></figure>
+<p>示例：创建一个存储过程，根据员工的部门 ID 输出部门名称</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> get_department_name(<span class="keyword">IN</span> p_department_id <span class="type">INT</span>)</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">DECLARE</span> department <span class="type">VARCHAR</span>(<span class="number">50</span>);</span><br><span class="line">    <span class="keyword">CASE</span> p_department_id</span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">1</span> <span class="keyword">THEN</span> <span class="keyword">SET</span> department <span class="operator">=</span> <span class="string">&#x27;销售部&#x27;</span>;</span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">2</span> <span class="keyword">THEN</span> <span class="keyword">SET</span> department <span class="operator">=</span> <span class="string">&#x27;技术部&#x27;</span>;</span><br><span class="line">        <span class="keyword">WHEN</span> <span class="number">3</span> <span class="keyword">THEN</span> <span class="keyword">SET</span> department <span class="operator">=</span> <span class="string">&#x27;财务部&#x27;</span>;</span><br><span class="line">        <span class="keyword">ELSE</span> <span class="keyword">SET</span> department <span class="operator">=</span> <span class="string">&#x27;其他部门&#x27;</span>;</span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">CASE</span>;</span><br><span class="line">    <span class="keyword">SELECT</span> department;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用时：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CALL</span> get_department_name(<span class="number">2</span>); <span class="comment">-- 输出技术部</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="循环语句（LOOP、WHILE-和-REPEAT）"><a href="#循环语句（LOOP、WHILE-和-REPEAT）" class="headerlink" title="循环语句（LOOP、WHILE 和 REPEAT）"></a>循环语句（LOOP、WHILE 和 REPEAT）</h3><h4 id="LOOP-语句"><a href="#LOOP-语句" class="headerlink" title="LOOP 语句"></a>LOOP 语句</h4><p>基本语法：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[loop_label:] LOOP</span><br><span class="line">    <span class="comment">-- 循环体</span></span><br><span class="line">    [LEAVE loop_label;] <span class="comment">-- 用于退出循环</span></span><br><span class="line"><span class="keyword">END</span> LOOP [loop_label];</span><br></pre></td></tr></table></figure>
+<p>LEAVE语句用于退出循环，loop_label是循环标签，可用于多层循环中指定退出的循环。</p>
+<p>示例：创建一个存储过程，计算从 1 到 10 的累加和</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> calculate_sum()</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">DECLARE</span> i <span class="type">INT</span> <span class="keyword">DEFAULT</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">DECLARE</span> sum <span class="type">INT</span> <span class="keyword">DEFAULT</span> <span class="number">0</span>;</span><br><span class="line">    my_loop: LOOP</span><br><span class="line">        <span class="keyword">SET</span> sum <span class="operator">=</span> sum <span class="operator">+</span> i;</span><br><span class="line">        <span class="keyword">SET</span> i <span class="operator">=</span> i <span class="operator">+</span> <span class="number">1</span>;</span><br><span class="line">        IF i <span class="operator">&gt;</span> <span class="number">10</span> <span class="keyword">THEN</span></span><br><span class="line">            LEAVE my_loop;</span><br><span class="line">        <span class="keyword">END</span> IF;</span><br><span class="line">    <span class="keyword">END</span> LOOP my_loop;</span><br><span class="line">    <span class="keyword">SELECT</span> sum;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用时：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CALL</span> calculate_sum(); <span class="comment">-- 输出55</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="WHILE-语句"><a href="#WHILE-语句" class="headerlink" title="WHILE 语句"></a>WHILE 语句</h4><p>基本语法：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WHILE <span class="keyword">condition</span> DO</span><br><span class="line">    <span class="comment">-- 循环体</span></span><br><span class="line"><span class="keyword">END</span> WHILE;</span><br></pre></td></tr></table></figure>
+<p>示例：使用WHILE语句实现上述相同功能</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> calculate_sum_while()</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">DECLARE</span> i <span class="type">INT</span> <span class="keyword">DEFAULT</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">DECLARE</span> sum <span class="type">INT</span> <span class="keyword">DEFAULT</span> <span class="number">0</span>;</span><br><span class="line">    WHILE i <span class="operator">&lt;=</span> <span class="number">10</span> DO</span><br><span class="line">        <span class="keyword">SET</span> sum <span class="operator">=</span> sum <span class="operator">+</span> i;</span><br><span class="line">        <span class="keyword">SET</span> i <span class="operator">=</span> i <span class="operator">+</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">END</span> WHILE;</span><br><span class="line">    <span class="keyword">SELECT</span> sum;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用时同样输出 55。</p>
+<h4 id="REPEAT-语句"><a href="#REPEAT-语句" class="headerlink" title="REPEAT 语句"></a>REPEAT 语句</h4><p>基本语法：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">REPEAT</span><br><span class="line">    <span class="comment">-- 循环体</span></span><br><span class="line">UNTIL <span class="keyword">condition</span> <span class="keyword">END</span> REPEAT;</span><br></pre></td></tr></table></figure>
+<p>示例：使用REPEAT语句实现累加和计算</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> calculate_sum_repeat()</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">DECLARE</span> i <span class="type">INT</span> <span class="keyword">DEFAULT</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">DECLARE</span> sum <span class="type">INT</span> <span class="keyword">DEFAULT</span> <span class="number">0</span>;</span><br><span class="line">    REPEAT</span><br><span class="line">        <span class="keyword">SET</span> sum <span class="operator">=</span> sum <span class="operator">+</span> i;</span><br><span class="line">        <span class="keyword">SET</span> i <span class="operator">=</span> i <span class="operator">+</span> <span class="number">1</span>;</span><br><span class="line">    UNTIL i <span class="operator">&gt;</span> <span class="number">10</span> <span class="keyword">END</span> REPEAT;</span><br><span class="line">    <span class="keyword">SELECT</span> sum;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>调用结果也是 55。不同的循环语句适用于不同的场景，开发人员可根据具体需求选择合适的循环结构。</p>
+<h2 id="存储过程的高级应用"><a href="#存储过程的高级应用" class="headerlink" title="存储过程的高级应用"></a>存储过程的高级应用</h2><h3 id="事务处理"><a href="#事务处理" class="headerlink" title="事务处理"></a>事务处理</h3><p>在存储过程中可以使用事务，确保一组相关操作要么全部成功提交，要么全部失败回滚，保证数据的一致性。<br>示例：创建一个存储过程，实现银行转账功能，包含事务控制</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> transfer_money(</span><br><span class="line">    <span class="keyword">IN</span> p_from_account <span class="type">INT</span>, </span><br><span class="line">    <span class="keyword">IN</span> p_to_account <span class="type">INT</span>, </span><br><span class="line">    <span class="keyword">IN</span> p_amount <span class="type">DECIMAL</span>(<span class="number">10</span>, <span class="number">2</span>)</span><br><span class="line">)</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">DECLARE</span> EXIT HANDLER <span class="keyword">FOR</span> <span class="keyword">SQLEXCEPTION</span></span><br><span class="line">    <span class="keyword">BEGIN</span></span><br><span class="line">        <span class="keyword">ROLLBACK</span>;</span><br><span class="line">        RESIGNAL;</span><br><span class="line">    <span class="keyword">END</span>;</span><br><span class="line">    <span class="keyword">START</span> TRANSACTION;</span><br><span class="line">    <span class="keyword">UPDATE</span> accounts <span class="keyword">SET</span> balance <span class="operator">=</span> balance <span class="operator">-</span> p_amount <span class="keyword">WHERE</span> account_id <span class="operator">=</span> p_from_account;</span><br><span class="line">    <span class="keyword">UPDATE</span> accounts <span class="keyword">SET</span> balance <span class="operator">=</span> balance <span class="operator">+</span> p_amount <span class="keyword">WHERE</span> account_id <span class="operator">=</span> p_to_account;</span><br><span class="line">    <span class="keyword">COMMIT</span>;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>在这个存储过程中，首先定义了一个异常处理程序，当发生 SQL 异常时，回滚事务并重新抛出异常。然后开始事务，进行两次账户余额的更新操作，如果这两个操作都成功，就提交事务；如果任何一个操作失败，异常处理程序会捕获异常并回滚事务，确保数据不会出现不一致的情况。</p>
+<h3 id="游标使用"><a href="#游标使用" class="headerlink" title="游标使用"></a>游标使用</h3><p>游标（Cursor）用于处理存储过程中的结果集，它允许我们逐行处理查询返回的数据。<br><strong>使用语法：</strong><br><strong>声明游标：</strong>DECLARE cursor_name CURSOR FOR select_statement;，游标声明必须在变量声明之后，并且游标必须始终与 SELECT 语句相关联。<br><strong>打开游标：</strong>OPEN cursor_name;<br><strong>取值：</strong>FETCH cursor_name INTO variable1, variable2, …;，将游标当前指向的行数据读取到指定的变量中。<br><strong>关闭游标：</strong>CLOSE cursor_name;，使用完游标后应及时关闭，释放资源。</p>
+<p>示例：创建一个存储过程，将用户表中所有用户的姓名拼接成一个字符串返回</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER <span class="operator">/</span><span class="operator">/</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> get_all_user_names()</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">DECLARE</span> <span class="keyword">result</span> <span class="type">VARCHAR</span>(<span class="number">1000</span>) <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">DECLARE</span> user_name <span class="type">VARCHAR</span>(<span class="number">50</span>);</span><br><span class="line">    <span class="keyword">DECLARE</span> done <span class="type">INT</span> <span class="keyword">DEFAULT</span> <span class="literal">FALSE</span>;</span><br><span class="line">    <span class="keyword">DECLARE</span> user_cursor <span class="keyword">CURSOR</span> <span class="keyword">FOR</span> <span class="keyword">SELECT</span> username <span class="keyword">FROM</span> users;</span><br><span class="line">    <span class="keyword">DECLARE</span> CONTINUE HANDLER <span class="keyword">FOR</span> <span class="keyword">NOT</span> FOUND <span class="keyword">SET</span> done <span class="operator">=</span> <span class="literal">TRUE</span>;</span><br><span class="line">    <span class="keyword">OPEN</span> user_cursor;</span><br><span class="line">    read_loop: LOOP</span><br><span class="line">        <span class="keyword">FETCH</span> user_cursor <span class="keyword">INTO</span> user_name;</span><br><span class="line">        IF done <span class="keyword">THEN</span></span><br><span class="line">            LEAVE read_loop;</span><br><span class="line">        <span class="keyword">END</span> IF;</span><br><span class="line">        <span class="keyword">SET</span> <span class="keyword">result</span> <span class="operator">=</span> CONCAT(<span class="keyword">result</span>, user_name, <span class="string">&#x27;, &#x27;</span>);</span><br><span class="line">    <span class="keyword">END</span> LOOP;</span><br><span class="line">    <span class="keyword">CLOSE</span> user_cursor;</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="keyword">result</span>;</span><br><span class="line"><span class="keyword">END</span> <span class="operator">/</span><span class="operator">/</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+<p>在这个存储过程中，首先声明了一些变量，包括用于存储结果字符串的result，用于存储单个用户名的user_name，以及用于标记是否读取到结果集末尾的done。然后声明了游标user_cursor并与查询用户姓名的 SELECT 语句关联，同时定义了一个异常处理程序，当游标读取到结果集末尾（即NOT FOUND）时，将done设置为TRUE。接着打开游标，通过循环不断从游标中读取用户名并拼接到result字符串中，最后关闭游标并返回结果。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://cancerking.github.io/cnblogs.github.io">fzheng</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://cancerking.github.io/cnblogs.github.io/p/c50c.html">https://cancerking.github.io/cnblogs.github.io/p/c50c.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://cancerking.github.io/cnblogs.github.io" target="_blank">落子&无悔</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/cnblogs.github.io/tags/MySQL/">MySQL</a></div><div class="post-share"><div class="social-share" data-image="/cnblogs.github.io/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/cnblogs.github.io/p/c713.html" title="SpringBoot3功能十二【定时任务调度】"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">SpringBoot3功能十二【定时任务调度】</div></div></div></a><a class="pagination-related  no-desc" href="/cnblogs.github.io/p/c30e.html" title="SpringCloud分布式功能三【基于Feign与Nacos的分布式】"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">SpringCloud分布式功能三【基于Feign与Nacos的分布式】</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related no-desc" href="/cnblogs.github.io/p/37224.html" title="MySQL数据库一【基础语句】"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-06</div><div class="info-item-2">MySQL数据库一【基础语句】</div></div></div></a><a class="pagination-related no-desc" href="/cnblogs.github.io/p/22924.html" title="MySQL数据库三【重置root密码-忘记原密码】"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-06</div><div class="info-item-2">MySQL数据库三【重置root密码-忘记原密码】</div></div></div></a><a class="pagination-related no-desc" href="/cnblogs.github.io/p/40284.html" title="MySQL数据库二【配置与命令详解】"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-06</div><div class="info-item-2">MySQL数据库二【配置与命令详解】</div></div></div></a><a class="pagination-related no-desc" href="/cnblogs.github.io/p/bb7d.html" title="MySQL数据库五【常用函数】"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-20</div><div class="info-item-2">MySQL数据库五【常用函数】</div></div></div></a><a class="pagination-related no-desc" href="/cnblogs.github.io/p/40a8.html" title="MySQL数据库六【SQL子查询语法示例】"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-08-14</div><div class="info-item-2">MySQL数据库六【SQL子查询语法示例】</div></div></div></a><a class="pagination-related no-desc" href="/cnblogs.github.io/p/30041.html" title="MySQL数据库四【高级语句】"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-08</div><div class="info-item-2">MySQL数据库四【高级语句】</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/cnblogs.github.io/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/cnblogs.github.io/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">fzheng</div><div class="author-info-description">常回来看看</div><div class="site-data"><a href="/cnblogs.github.io/archives/"><div class="headline">文章</div><div class="length-num">166</div></a><a href="/cnblogs.github.io/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/cnblogs.github.io/categories/"><div class="headline">分类</div><div class="length-num">21</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Cancerking"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Cancerking" target="_blank" title="Github"><i class="fab fa-github" style="color: #4a7dbe;"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=492256326&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq" style="color: #4a7dbe;"></i></a><a class="social-icon" href="mailto:492256326@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">存储过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.</span> <span class="toc-text">存储过程的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8E%E5%87%BD%E6%95%B0%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.2.</span> <span class="toc-text">与函数的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E8%B0%83%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">存储过程的创建与调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">2.1.</span> <span class="toc-text">创建存储过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">调用存储过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E4%B8%8E%E5%88%A0%E9%99%A4%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">2.3.</span> <span class="toc-text">修改与删除存储过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E8%AF%AD%E5%8F%A5"><span class="toc-number">3.</span> <span class="toc-text">存储过程的流程控制语句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%E8%AF%AD%E5%8F%A5%EF%BC%88IF-%E5%92%8C-CASE%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">条件判断语句（IF 和 CASE）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#IF-%E8%AF%AD%E5%8F%A5"><span class="toc-number">3.1.1.</span> <span class="toc-text">IF 语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CASE-%E8%AF%AD%E5%8F%A5"><span class="toc-number">3.1.2.</span> <span class="toc-text">CASE 语句</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5%EF%BC%88LOOP%E3%80%81WHILE-%E5%92%8C-REPEAT%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">循环语句（LOOP、WHILE 和 REPEAT）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#LOOP-%E8%AF%AD%E5%8F%A5"><span class="toc-number">3.2.1.</span> <span class="toc-text">LOOP 语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#WHILE-%E8%AF%AD%E5%8F%A5"><span class="toc-number">3.2.2.</span> <span class="toc-text">WHILE 语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#REPEAT-%E8%AF%AD%E5%8F%A5"><span class="toc-number">3.2.3.</span> <span class="toc-text">REPEAT 语句</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E7%9A%84%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">存储过程的高级应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86"><span class="toc-number">4.1.</span> <span class="toc-text">事务处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%B8%E6%A0%87%E4%BD%BF%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text">游标使用</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/cnblogs.github.io/p/24fd.html" title="SpringBoot3集成十五【日志Logback框架】">SpringBoot3集成十五【日志Logback框架】</a><time datetime="2025-08-24T12:24:32.000Z" title="发表于 2025-08-24 20:24:32">2025-08-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/cnblogs.github.io/p/92e1.html" title="SpringBoot2集成八【RabbitMQ框架】">SpringBoot2集成八【RabbitMQ框架】</a><time datetime="2025-08-24T09:51:24.000Z" title="发表于 2025-08-24 17:51:24">2025-08-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/cnblogs.github.io/p/d174.html" title="SpringBoot2集成七【Log4j2框架】">SpringBoot2集成七【Log4j2框架】</a><time datetime="2025-08-24T09:42:41.000Z" title="发表于 2025-08-24 17:42:41">2025-08-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/cnblogs.github.io/p/3bc.html" title="SpringBoot功能十五【Redis-使用SpringCache注解方式】">SpringBoot功能十五【Redis-使用SpringCache注解方式】</a><time datetime="2025-08-24T07:53:41.000Z" title="发表于 2025-08-24 15:53:41">2025-08-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/cnblogs.github.io/p/c3b1.html" title="SpringBoot功能十四【Redis-RedisTemplate功能】">SpringBoot功能十四【Redis-RedisTemplate功能】</a><time datetime="2025-08-24T04:47:41.000Z" title="发表于 2025-08-24 12:47:41">2025-08-24</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="copyright">&copy;2025 By fzheng</div><div class="footer_custom_text">我是有底线的喔</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/cnblogs.github.io/js/utils.js"></script><script src="/cnblogs.github.io/js/main.js"></script><script src="/cnblogs.github.io/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const $chartjs = document.querySelectorAll('#article-container .chartjs-container')
+  if ($chartjs.length === 0) return
+
+  const applyThemeDefaultsConfig = theme => {
+    if (theme === 'dark-mode') {
+      Chart.defaults.color = "rgba(255, 255, 255, 0.8)"
+      Chart.defaults.borderColor = "rgba(255, 255, 255, 0.2)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    } else {
+      Chart.defaults.color = "rgba(0, 0, 0, 0.8)"
+      Chart.defaults.borderColor = "rgba(0, 0, 0, 0.1)"
+      Chart.defaults.scale.ticks.backdropColor = "transparent"
+    }
+  }
+
+  // Recursively traverse the config object and automatically apply theme-specific color schemes
+  const applyThemeConfig = (obj, theme) => {
+    if (typeof obj !== 'object' || obj === null) return
+    
+    Object.keys(obj).forEach(key => {
+      const value = obj[key]
+      // If the property is an object and has theme-specific options, apply them
+      if (typeof value === 'object' && value !== null) {
+        if (value[theme]) {
+          obj[key] = value[theme] // Apply the value for the current theme
+        } else {
+          // Recursively process child objects
+          applyThemeConfig(value, theme)
+        }
+      }
+    })
+  }
+
+  const runChartJS = () => {
+    window.loadChartJS = true
+
+    Array.from($chartjs).forEach((item, index) => {
+      const chartSrc = item.firstElementChild
+      const chartID = item.getAttribute('data-chartjs-id') || ('chartjs-' + index) // Use custom ID or default ID
+      const width = item.getAttribute('data-width')
+      const existingCanvas = document.getElementById(chartID)
+
+      // If a canvas already exists, remove it to avoid rendering duplicates
+      if (existingCanvas) {
+          existingCanvas.parentNode.remove()
+      }
+
+      const chartDefinition = chartSrc.textContent
+      const canvas = document.createElement('canvas')
+      canvas.id = chartID
+
+      const div = document.createElement('div')
+      div.className = 'chartjs-wrap'
+
+      if (width) {
+        div.style.width = width
+      }
+
+      div.appendChild(canvas)
+      chartSrc.insertAdjacentElement('afterend', div)
+
+      const ctx = document.getElementById(chartID).getContext('2d')
+
+      const config = JSON.parse(chartDefinition)
+
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark-mode' : 'light-mode'
+
+      // Set default styles (initial setup)
+      applyThemeDefaultsConfig(theme)
+
+      // Automatically traverse the config and apply dual-mode color schemes
+      applyThemeConfig(config, theme)
+
+      new Chart(ctx, config)
+    })
+  }
+
+  const loadChartJS = () => {
+    window.loadChartJS ? runChartJS() : btf.getScript('https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js').then(runChartJS)
+  }
+
+  // Listen for theme change events
+  btf.addGlobalFn('themeChange', runChartJS, 'chartjs')
+  btf.addGlobalFn('encrypt', runChartJS, 'chartjs')
+
+  window.pjax ? loadChartJS() : document.addEventListener('DOMContentLoaded', loadChartJS)
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const initValine = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyValine = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const valineConfig = {
+      el: '#vcomment',
+      appId: 'djnhagtDLdk4u7zoa2o1zU3g-gzGzoHsz',
+      appKey: 'uf4orO2QcLRfho1cnC3IylNw',
+      avatar: 'monsterid',
+      serverURLs: 'https://djnhagtd.lc-cn-n1-shared.com',
+      emojiMaps: "",
+      visitor: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || window.location.pathname
+    }
+
+    new Valine(valineConfig)
+  }
+
+  const loadValine = async (el, path) => {
+    if (typeof Valine === 'function') {
+      initValine(el, path)
+    } else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Valine' === 'Valine'
+      ? window.shuoshuoComment = { loadComment: loadValine }
+      : window.loadOtherComment = loadValine
+    return
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/gh/xiabo2/CDN@latest/fishes.js"></script><div class="aplayer no-destroy" data-id="9212222653" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"> </div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => fn())
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      pjax.loadUrl('/cnblogs.github.io/404.html')
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/cnblogs.github.io/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>function history_calendar_injector_config(){
+                var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+                var item_html = '<div class="card-widget card-history"><div class="card-content"><div class="item-headline"><i class="fas fa-clock fa-spin"></i><span>那年今日</span></div><div id="history-baidu" style="height: 100px;overflow: hidden"><div class="history_swiper-container" id="history-container" style="width: 100%;height: 100%"><div class="swiper-wrapper" id="history_container_wrapper" style="height:20px"></div></div></div></div>';
+                console.log('已挂载history_calendar')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('sticky_layout')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            history_calendar_injector_config()
+        } </script><script data-pjax  src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script><script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-card-history/baiduhistory/js/main.js"></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '1s');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '');
+    arr[i].setAttribute('data-wow-delay', '');
+    arr[i].setAttribute('data-wow-offset', '');
+    arr[i].setAttribute('data-wow-iteration', '');
+  }</script></div><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow.min.js"></script><script defer src="https://npm.elemecdn.com/hexo-butterfly-wowjs/lib/wow_init.js"></script><!-- hexo injector body_end end --></body></html>
